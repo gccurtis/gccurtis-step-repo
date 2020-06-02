@@ -17,7 +17,7 @@
  */
 function addRandomGreeting() {
   const greetings =
-      ['The Setesh guard’s nose drips.', 'La nariz del guardia de Setesh gotea.', '塞特什警卫队的鼻子在滴水','Le nez du garde Seth dégoulinait.'];
+      ['To be or not to be, that is the question', 'ser o no ser esa es la pregunta', '是或不是，这就是问题', 'être ou ne pas être, telle est la Question'];
 
   // Pick a random greeting.
   const greeting = greetings[Math.floor(Math.random() * greetings.length)];
@@ -26,3 +26,11 @@ function addRandomGreeting() {
   const greetingContainer = document.getElementById('greeting-container');
   greetingContainer.innerText = greeting;
 }
+
+function getData(){
+	const name = document.getElementById('text-input').value; 
+	fetch('/data2?name='+name).then(response => response.text()).then((data) => {
+	document.getElementById('data-display').innerText = data;
+	});
+}
+

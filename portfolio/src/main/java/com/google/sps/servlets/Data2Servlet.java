@@ -27,7 +27,7 @@ public class Data2Servlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String input = request.getParameter("name");
-    response.setContentType("text;");
+    response.setContentType("text/plain;");
     response.getWriter().println("Pac-"+input+"-Man");
   }
 }

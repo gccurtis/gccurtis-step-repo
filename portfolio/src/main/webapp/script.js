@@ -30,3 +30,14 @@ function getData(){
   });
 }
 
+function loadComments(){
+  fetch('/comments').then(response => response.json()).then((comments) => {
+    const commentSection = document.getElementById('comment-section');
+    for(i=0;i<comments.length;i++){
+      const commentContainer = document.createElement("li");
+      commentContainer.innerText = comments[i];
+      commentSection.appendChild(commentContainer);
+    }})
+}
+
+loadComments();

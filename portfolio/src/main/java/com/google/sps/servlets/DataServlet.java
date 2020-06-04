@@ -19,6 +19,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import com.google.gson.Gson;
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
@@ -28,15 +29,18 @@ public class DataServlet extends HttpServlet {
   
   @Override
   public void init(){
-    msgs[0] = "A";
-    msgs[1] = "B";
-    msgs[2] = "C";
+    msgs.add("A");
+    msgs.add("B");
+    msgs.add("C");
   }
 
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    Gson gson = new Gson();
+    String json = gson.toJson(msgs);
+    System.out.println(msgs.get(1));
     response.setContentType("text/html;");
-    response.getWriter().println("<h1>Hello Gabriel!</h1>");
+    response.getWriter().println(json);
   }
 }

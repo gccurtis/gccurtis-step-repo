@@ -16,21 +16,17 @@
  * Adds a random greeting to the page.
  */
 function addRandomGreeting() {
-  const greetings =
-      ['To be or not to be, that is the question', 'ser o no ser esa es la pregunta', '是或不是，这就是问题', 'être ou ne pas être, telle est la Question'];
-
-  // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
-
-  // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+  fetch('/data').then(response => response.json()).then((data) => {
+    const greeting = data[Math.floor(Math.random()*data.length)];
+    const greetingContainer = document.getElementById('greeting-container');
+    greetingContainer.innerText = greeting;
+  });
 }
 
 function getData(){
-	const name = document.getElementById('text-input').value; 
-	fetch('/data2?name='+name).then(response => response.text()).then((data) => {
-	    document.getElementById('data-display').innerText = data;
-	});
+  const name = document.getElementById('text-input').value; 
+  fetch('/data2?name='+name).then(response => response.text()).then((data) => {
+    document.getElementById('data-display').innerText = data;
+  });
 }
 

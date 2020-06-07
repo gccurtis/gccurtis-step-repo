@@ -28,9 +28,9 @@ function addRandomGreeting() {
 }
 
 function getData(){
-	const name = document.getElementById('text-input').value; 
-	fetch('/data2?name='+name).then(response => response.text()).then((data) => {
-	document.getElementById('data-display').innerText = data;
-	});
+  const name = document.getElementById('text-input').value; 
+  fetch('/data2?name='+name).then(response => response.text()).then((data) => {
+    document.getElementById('data-display').innerText = data;
+  });
 }
 

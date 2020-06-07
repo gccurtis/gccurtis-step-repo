@@ -16,6 +16,7 @@ package com.google.sps.servlets;
 
 import com.google.sps.data.Comment;
 import java.io.IOException;
+import java.io.BufferedReader;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -27,49 +28,28 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.Key;
 
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
-@WebServlet("/comments")
-public class CommentServlet extends HttpServlet {
+@WebServlet("/delete-comment")
+public class DeleteServlet extends HttpServlet {
   DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-  // private ArrayList<String> comments = new ArrayList<String>();
   
   @Override
   public void init(){
-    //comments.add("This is the first message, and is hardcoded.");
   }
 
-
-  @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    long timestamp = System.currentTimeMillis();
-    Entity commentEntity = new Entity("Comment");
-    commentEntity.setProperty("message",request.getParameter("comment"));
-    commentEntity.setProperty("timestamp",timestamp);
-    datastore.put(commentEntity);
-    response.sendRedirect("/index.html");
-  }
-
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Gson gson = new Gson();
-    Query query = new Query("Comment").addSort("timestamp",Query.SortDirection.DESCENDING);
-    PreparedQuery results = datastore.prepare(query);
-    ArrayList<Comment> comments = new ArrayList<Comment>();
-    int i = 0;
-    for(Entity entity : results.asIterable()){
-      if (i == Integer.parseInt(request.getParameter("numberOfComments"))){
-        break;
-      }
-      String message = (String) entity.getProperty("message");
-      long timestamp = (long) entity.getProperty("timestamp");
-      long id = entity.getKey().getId(); 
-      comments.add(new Comment(id,message, timestamp));
-      i++;
+    Key k = KeyFactory.createKey("Comment",Long.parseLong(request.getParameter("id")));
+    System.out.println(request.getParameter("id")+" "+k);
+    try{
+      Entity e = datastore.get(k);
+      System.out.println((String) e.getProperty("message"));
+      datastore.delete(k);
+    }catch(Exception e){
+      System.out.println("Wrong key");
     }
-    String json = gson.toJson(comments);
-    response.setContentType("application/json");
-    response.getWriter().println(json);
   }
 }

@@ -42,8 +42,15 @@
       <br>
       <br>
       <h1>Comment</h1>
+      <br>
+      <p>Number of comments displayed: </p>
+      <input type="number" id="numberOfComments" value="0" min="0" onchange="loadComments()">
+      <br>
+      <p>Click on comment to delete it</p>
+      <br>
       <form action='/comments' method="POST">
         <textarea name="comment"></textarea>
+	<br>
 	<input type="submit"/>
       </form>
       <br>

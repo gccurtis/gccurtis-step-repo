@@ -30,14 +30,47 @@ function getData(){
   });
 }
 
-function loadComments(){
-  fetch('/comments').then(response => response.json()).then((comments) => {
-    const commentSection = document.getElementById('comment-section');
-    for(i=0;i<comments.length;i++){
-      const commentContainer = document.createElement("li");
-      commentContainer.innerText = comments[i];
-      commentSection.appendChild(commentContainer);
-    }})
+function removeChildren(node){
+  const children = node.childNodes;
+  while(node.hasChildNodes()){
+    node.removeChild(children[0]);
+  }
+  console.log(node.childNodes.length);
 }
 
-loadComments();
+function deleteComment(id){
+  //const myHeaders = new Headers();
+  //myHeaders.append('Content-Type','text/plain');
+  //const formData = new FormData();
+  //formData.append("id2",id);
+  //formData.append("id3",id);
+  //console.log("id: "+id+" "+formData.get("id2"));
+  //var request = new XMLHttpRequest();
+  //request.open("POST", "/delete-comment");
+  //request.send(formData);
+  //fetch('/delete-comment',{method: 'POST',headers: myHeaders,body: new URLSearchParams("id="+String(id))});
+  var oReq = new XMLHttpRequest();
+  oReq.open("POST", "/delete-comment");
+  oReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  oReq.send("id="+id);
+  loadComments();
+}
+
+function loadComments(){
+  const numberOfComments = document.getElementById("numberOfComments").value;
+  const commentSection = document.getElementById('comment-section');
+  removeChildren(commentSection);
+  fetch('/comments?numberOfComments='+numberOfComments).then(response => response.json()).then((comments) => {
+    console.log(comments);
+    for(i=0;i<comments.length;i++){
+      const commentContainer = document.createElement("li");
+      const commentId = comments[i].id;
+      commentContainer.innerText = comments[i].message;
+      console.log(comments[i]);
+      console.log(comments[i].timestamp);
+      commentContainer.setAttribute("id",comments[i].id);
+      commentContainer.setAttribute("onClick","deleteComment(this.id)");
+      //commentContainer.onclick = (() => deleteComment(commentId));
+      commentSection.appendChild(commentContainer);
+    }});
+}

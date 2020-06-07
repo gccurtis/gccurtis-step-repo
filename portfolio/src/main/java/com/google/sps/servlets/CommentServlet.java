@@ -33,11 +33,9 @@ import com.google.appengine.api.datastore.PreparedQuery;
 @WebServlet("/comments")
 public class CommentServlet extends HttpServlet {
   DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-  // private ArrayList<String> comments = new ArrayList<String>();
   
   @Override
   public void init(){
-    //comments.add("This is the first message, and is hardcoded.");
   }
 
 
@@ -69,7 +67,7 @@ public class CommentServlet extends HttpServlet {
       i++;
     }
     String json = gson.toJson(comments);
-    response.setContentType("application/json");
+    response.setContentType("application/json;");
     response.getWriter().println(json);
   }
 }

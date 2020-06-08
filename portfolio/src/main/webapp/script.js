@@ -16,13 +16,28 @@
  * Adds a random greeting to the page.
  */
 function addRandomGreeting() {
-  const greetings =
-      ['The Setesh guard’s nose drips.', 'La nariz del guardia de Setesh gotea.', '塞特什警卫队的鼻子在滴水','Le nez du garde Seth dégoulinait.'];
-
-  // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
-
-  // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+  fetch('/data').then(response => response.json()).then((data) => {
+    const greeting = data[Math.floor(Math.random()*data.length)];
+    const greetingContainer = document.getElementById('greeting-container');
+    greetingContainer.innerText = greeting;
+  });
 }
+
+function getData(){
+  const name = document.getElementById('text-input').value; 
+  fetch('/data2?name='+name).then(response => response.text()).then((data) => {
+    document.getElementById('data-display').innerText = data;
+  });
+}
+
+function loadComments(){
+  fetch('/comments').then(response => response.json()).then((comments) => {
+    const commentSection = document.getElementById('comment-section');
+    for(i=0;i<comments.length;i++){
+      const commentContainer = document.createElement("li");
+      commentContainer.innerText = comments[i];
+      commentSection.appendChild(commentContainer);
+    }})
+}
+
+loadComments();

@@ -16,15 +16,11 @@
  * Adds a random greeting to the page.
  */
 function addRandomGreeting() {
-  const greetings =
-      ['To be or not to be, that is the question', 'ser o no ser esa es la pregunta', '是或不是，这就是问题', 'être ou ne pas être, telle est la Question'];
-
-  // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
-
-  // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+  fetch('/data').then(response => response.json()).then((data) => {
+    const greeting = data[Math.floor(Math.random()*data.length)];
+    const greetingContainer = document.getElementById('greeting-container');
+    greetingContainer.innerText = greeting;
+  });
 }
 
 function getData(){
@@ -34,3 +30,15 @@ function getData(){
   });
 }
 
+function loadComments(){
+  fetch('/comments').then(response => response.json()).then((comments) => {
+    const commentSection = document.getElementById('comment-section');
+    for(i=0;i<comments.length;i++){
+      const commentContainer = document.createElement("li");
+      commentContainer.innerText = comments[i];
+      commentSection.appendChild(commentContainer);
+    }
+  })
+}
+
+loadComments();

@@ -23,24 +23,26 @@ import java.util.ArrayList;
 import com.google.gson.Gson;
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
-@WebServlet("/data")
-public class DataServlet extends HttpServlet {
-  private ArrayList<String> msgs = new ArrayList<String>();
+@WebServlet("/comments")
+public class CommentServlet extends HttpServlet {
+  private ArrayList<String> comments = new ArrayList<String>();
   
   @Override
   public void init(){
-    msgs.add("A");
-    msgs.add("B");
-    msgs.add("C");
+    comments.add("This is the first message, and is hardcoded.");
   }
 
 
   @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    comments.add(request.getParameter("comment"));
+    response.sendRedirect("/index.html");
+  }
+
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Gson gson = new Gson();
-    String json = gson.toJson(msgs);
-    System.out.println(msgs.get(1));
-    response.setContentType("application/json;");
+    String json = gson.toJson(comments);
+    response.setContentType("application/json");
     response.getWriter().println(json);
   }
 }

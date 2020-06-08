@@ -24,8 +24,7 @@ function addRandomGreeting() {
 }
 
 function getData(){
-  const name = document.getElementById('text-input').value; 
-  fetch('/data2?name='+name).then(response => response.text()).then((data) => {
+  fetch('/data2?name=${document.getElementById("text-input").value}').then(response => response.text()).then((data) => {
     document.getElementById('data-display').innerText = data;
   });
 }
@@ -41,7 +40,7 @@ function deleteComment(id){
   var oReq = new XMLHttpRequest();
   oReq.open("POST", "/delete-comment");
   oReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-  oReq.send("id="+id);
+  oReq.send("id=${id}");
   loadComments();
 }
 

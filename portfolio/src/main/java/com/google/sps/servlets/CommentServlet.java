@@ -29,22 +29,15 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.PreparedQuery;
 
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/comments")
 public class CommentServlet extends HttpServlet {
   DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
   
   @Override
-  public void init(){
-  }
-
-
-  @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    long timestamp = System.currentTimeMillis();
     Entity commentEntity = new Entity("Comment");
     commentEntity.setProperty("message",request.getParameter("comment"));
-    commentEntity.setProperty("timestamp",timestamp);
+    commentEntity.setProperty("timestamp",System.currentTimeMillis());
     datastore.put(commentEntity);
     response.sendRedirect("/index.html");
   }
@@ -55,17 +48,20 @@ public class CommentServlet extends HttpServlet {
     Query query = new Query("Comment").addSort("timestamp",Query.SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
     ArrayList<Comment> comments = new ArrayList<Comment>();
+    
     int i = 0;
-    for(Entity entity : results.asIterable()){
-      if (i == Integer.parseInt(request.getParameter("numberOfComments"))){
-        break;
-      }
+    List<Entity> results = datastore.prepare(query).AsList();
+    int limit = Integer.parseInt(request.getParameter("numberOfComments"));
+
+    while (i < limit) {
+      Entity entity = results.At(i);
       String message = (String) entity.getProperty("message");
       long timestamp = (long) entity.getProperty("timestamp");
       long id = entity.getKey().getId(); 
       comments.add(new Comment(id,message, timestamp));
       i++;
     }
+
     String json = gson.toJson(comments);
     response.setContentType("application/json;");
     response.getWriter().println(json);

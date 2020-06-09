@@ -37,7 +37,8 @@ function loadComments(){
       const commentContainer = document.createElement("li");
       commentContainer.innerText = comments[i];
       commentSection.appendChild(commentContainer);
-    }})
+    }
+  })
 }
 
 loadComments();

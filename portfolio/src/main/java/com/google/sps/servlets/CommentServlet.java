@@ -36,8 +36,8 @@ public class CommentServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Entity commentEntity = new Entity("Comment");
-    commentEntity.setProperty("message",request.getParameter("comment"));
-    commentEntity.setProperty("timestamp",System.currentTimeMillis());
+    commentEntity.setProperty("message", request.getParameter("comment"));
+    commentEntity.setProperty("timestamp", System.currentTimeMillis());
     datastore.put(commentEntity);
     response.sendRedirect("/index.html");
   }
@@ -45,7 +45,7 @@ public class CommentServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Gson gson = new Gson();
-    Query query = new Query("Comment").addSort("timestamp",Query.SortDirection.DESCENDING);
+    Query query = new Query("Comment").addSort("timestamp", Query.SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
     ArrayList<Comment> comments = new ArrayList<Comment>();
     int i = 0;

@@ -48,6 +48,7 @@ public class CommentServlet extends HttpServlet {
     Query query = new Query("Comment").addSort("timestamp",Query.SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
     ArrayList<Comment> comments = new ArrayList<Comment>();
+    
     int i = 0;
     List<Entity> results = datastore.prepare(query).AsList();
     int limit = Integer.parseInt(request.getParameter("numberOfComments"));
@@ -59,6 +60,7 @@ public class CommentServlet extends HttpServlet {
       comments.add(new Comment(id,message, timestamp));
       i++;
     }
+
     String json = gson.toJson(comments);
     response.setContentType("application/json;");
     response.getWriter().println(json);

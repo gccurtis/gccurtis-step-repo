@@ -72,5 +72,6 @@ function loadComments(){
       commentContainer.setAttribute("onClick","deleteComment(this.id)");
       //commentContainer.onclick = (() => deleteComment(commentId));
       commentSection.appendChild(commentContainer);
-    }});
+    }
+  })
 }

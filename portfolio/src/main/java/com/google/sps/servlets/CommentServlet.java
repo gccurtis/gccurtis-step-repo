@@ -52,7 +52,6 @@ public class CommentServlet extends HttpServlet {
     int i = 0;
     List<Entity> results = datastore.prepare(query).AsList();
     int limit = Integer.parseInt(request.getParameter("numberOfComments"));
-
     while (i < limit) {
       Entity entity = results.At(i);
       String message = (String) entity.getProperty("message");

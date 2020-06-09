@@ -43,10 +43,8 @@ public class DeleteServlet extends HttpServlet {
 
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Key k = KeyFactory.createKey("Comment",Long.parseLong(request.getParameter("id")));
-    System.out.println(request.getParameter("id")+" "+k);
     try{
       Entity e = datastore.get(k);
-      System.out.println((String) e.getProperty("message"));
       datastore.delete(k);
     }catch(Exception e){
       System.out.println("Wrong key");

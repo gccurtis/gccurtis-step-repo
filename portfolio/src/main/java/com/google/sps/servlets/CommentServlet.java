@@ -50,12 +50,12 @@ public class CommentServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Gson gson = new Gson();
     ArrayList<Comment> comments = new ArrayList<Comment>();
-    UserService userService = UserServiceFactory.getUserService();
-    if (!userService.isUserLoggedIn()) {
-      response.setContentType("application/json;");
-      response.getWriter().println(gson.toJson("Not Logged In"));
-      return;
-    }
+    //UserService userService = UserServiceFactory.getUserService();
+    //if (!userService.isUserLoggedIn()) {
+    //  response.setContentType("application/json;");
+    //  response.getWriter().println(gson.toJson("Not Logged In"));
+    //  return;
+    //}
     Query query = new Query("Comment").addSort("timestamp", Query.SortDirection.DESCENDING);
     int limit = Integer.parseInt(request.getParameter("numberOfComments"));
     List<Entity> results = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(limit));

@@ -48,7 +48,7 @@ function loadComments(){
   const numberOfComments = document.getElementById("numberOfComments").value;
   const commentSection = document.getElementById('comment-section');
   removeChildren(commentSection);
-  fetch('/comments?numberOfComments=${numberOfComments}').then(response => response.json()).then((comments) => {
+  fetch('/comments?numberOfComments='+numberOfComments).then(response => response.json()).then((comments) => {
     for(i=0;i<comments.length;i++){
       const commentContainer = document.createElement("li");
       const commentId = comments[i].id;

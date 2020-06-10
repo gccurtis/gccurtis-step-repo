@@ -21,12 +21,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.List;
 import com.google.gson.Gson;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 
 
 @WebServlet("/comments")
@@ -45,19 +49,21 @@ public class CommentServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Gson gson = new Gson();
-    Query query = new Query("Comment").addSort("timestamp", Query.SortDirection.DESCENDING);
-    PreparedQuery results = datastore.prepare(query);
     ArrayList<Comment> comments = new ArrayList<Comment>();
-    int i = 0;
-    List<Entity> results = datastore.prepare(query).AsList();
+    UserService userService = UserServiceFactory.getUserService();
+    if (!userService.isUserLoggedIn()) {
+      response.setContentType("application/json;");
+      response.getWriter().println(gson.toJson("Not Logged In"));
+      return;
+    }
+    Query query = new Query("Comment").addSort("timestamp", Query.SortDirection.DESCENDING);
     int limit = Integer.parseInt(request.getParameter("numberOfComments"));
-    while (i < limit) {
-      Entity entity = results.At(i);
+    List<Entity> results = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(limit));
+    for(Entity entity: results) {
       String message = (String) entity.getProperty("message");
       long timestamp = (long) entity.getProperty("timestamp");
       long id = entity.getKey().getId(); 
       comments.add(new Comment(id,message, timestamp));
-      i++;
     }
     String json = gson.toJson(comments);
     response.setContentType("application/json;");

@@ -65,6 +65,7 @@ public class CommentServlet extends HttpServlet {
       long id = entity.getKey().getId(); 
       comments.add(new Comment(id,message, timestamp));
     }
+
     String json = gson.toJson(comments);
     response.setContentType("application/json;");
     response.getWriter().println(json);

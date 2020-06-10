@@ -56,5 +56,6 @@ function loadComments(){
       commentContainer.setAttribute("id",comments[i].id);
       commentContainer.setAttribute("onClick","deleteComment(this.id)");
       commentSection.appendChild(commentContainer);
-    }});
+    }
+  })
 }

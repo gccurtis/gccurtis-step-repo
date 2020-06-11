@@ -16,7 +16,7 @@
           <li>Math enthusiast and Lover of Algorithms</li>
           <li>I love all kinds of music, especially rock and classical</li>
           <li>Favorite director is Christopher Nolan</li>
-          <li>2nd Place table tennis champion at George Mason University</li>
+          <li>2nd place table tennis champion at George Mason University</li>
       </ul>
       <a src="https://github.com/gccurtis">My github account: gccurtis</a>
       <a src="https://www.linkedin.com/in/gabriel-curtis-8a8586190/">This is my LinkedIn account</a>
@@ -41,20 +41,23 @@
       <div id="greeting-container"></div>
       <br>
       <br>
-      <h1>Comment</h1>
-      <br>
-      <p>Number of comments displayed: </p>
-      <input type="number" id="numberOfComments" value="0" min="0" onchange="loadComments()">
-      <br>
-      <p>Click on comment to delete it</p>
-      <br>
-      <form action='/comments' method="POST">
-        <textarea name="comment"></textarea>
-	<br>
-	<input type="submit"/>
-      </form>
-      <br>
-      <ul id="comment-section"></ul>
+      <div id="display-comments">
+	<h1>Comments</h1>
+        <br>
+        <p>Number of comments displayed: </p>
+        <input type="number" id="numberOfComments" value="0" min="0" onchange="loadComments()">
+        <br>
+        <p>Click on comment to delete it</p>
+        <br>
+        <form action='/comments' method="POST">
+          <textarea name="comment"></textarea>
+	  <br>
+	  <input type="submit"/>
+        </form>
+        <br>
+        <ul id="comment-section"></ul>
+      </div>
+      <a id="logout-url"></a>
     </div>
   </body>
 </html>

@@ -15,6 +15,10 @@
 /**
  * Adds a random greeting to the page.
  */
+
+
+const params = new Map(window.location.search.split("&").map(x => x.split("=")).map(y => [y[0],decodeURIComponent(y[1])]));
+
 function addRandomGreeting() {
   fetch('/data').then(response => response.json()).then((data) => {
     const greeting = data[Math.floor(Math.random()*data.length)];
@@ -52,10 +56,26 @@ function loadComments(){
     for(i=0;i<comments.length;i++){
       const commentContainer = document.createElement("li");
       const commentId = comments[i].id;
-      commentContainer.innerText = comments[i].message;
+      commentContainer.innerText = comments[i].email+" says: "+comments[i].message;
       commentContainer.setAttribute("id",comments[i].id);
       commentContainer.setAttribute("onClick","deleteComment(this.id)");
       commentSection.appendChild(commentContainer);
     }
   })
+}
+
+window.onload = (event) => {
+  if(params.get("?loggedIn") == "0"){
+    const displayComments = document.getElementById("display-comments");
+    removeChildren(displayComments);
+    const message = document.createElement("a");
+    message.setAttribute("href",params.get("url"));
+    message.innerText = "Click here to Log in and see/add comments!";
+    displayComments.appendChild(message);
+  }
+  else{
+    const logoutUrl = document.getElementById("logout-url");
+    logoutUrl.setAttribute("href",params.get("url"));
+    logoutUrl.innerText = "LOGOUT";
+  }
 }

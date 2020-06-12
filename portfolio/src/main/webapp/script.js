@@ -16,7 +16,7 @@
  * Adds a random greeting to the page.
  */
 
-
+//Gets url parameters and decodes them
 const params = new Map(window.location.search.split("&").map(x => x.split("=")).map(y => [y[0],decodeURIComponent(y[1])]));
 
 function addRandomGreeting() {
@@ -28,7 +28,7 @@ function addRandomGreeting() {
 }
 
 function getData(){
-  fetch('/data2?name=${document.getElementById("text-input").value}').then(response => response.text()).then((data) => {
+  fetch(`/data2?name=${document.getElementById("text-input").value}`).then(response => response.text()).then((data) => {
     document.getElementById('data-display').innerText = data;
   });
 }
@@ -65,17 +65,21 @@ function loadComments(){
 }
 
 window.onload = (event) => {
-  if(params.get("?loggedIn") == "0"){
-    const displayComments = document.getElementById("display-comments");
-    removeChildren(displayComments);
-    const message = document.createElement("a");
-    message.setAttribute("href",params.get("url"));
-    message.innerText = "Click here to Log in and see/add comments!";
-    displayComments.appendChild(message);
-  }
-  else{
-    const logoutUrl = document.getElementById("logout-url");
-    logoutUrl.setAttribute("href",params.get("url"));
-    logoutUrl.innerText = "LOGOUT";
-  }
+  fetch(`validate-email?email=${params.get("?email")}&token=${params.get("token")}`).then(response => response.text()).then((check) =>{
+    console.log(check);
+    if(check == 0 || check == "0"){
+      console.log(check);
+      const displayComments = document.getElementById("display-comments");
+      removeChildren(displayComments);
+      const message = document.createElement("a");
+      message.setAttribute("href",params.get("url"));
+      message.innerText = "Click here to Log in and see/add comments!";
+      displayComments.appendChild(message);
+    }
+    else{
+      const logoutUrl = document.getElementById("logout-url");
+      logoutUrl.setAttribute("href",params.get("url"));
+      logoutUrl.innerText = "LOGOUT";
+    }
+  })
 }

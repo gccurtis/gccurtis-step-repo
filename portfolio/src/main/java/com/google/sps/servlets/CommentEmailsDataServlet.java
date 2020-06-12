@@ -43,7 +43,7 @@ public class CommentEmailsDataServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Gson gson = new Gson();
     ArrayList<Comment> comments = new ArrayList<Comment>();
-    Query query = new Query("Comment");
+    Query query = new Query("Comment").addSort("timestamp",Query.SortDirection.DESCENDING);
     int limit = Integer.parseInt(request.getParameter("numberOfComments"));
     String currentEmail;
     List<Entity> results = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(limit));

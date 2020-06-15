@@ -40,20 +40,22 @@ DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
     response.setContentType("text/html");
     UserService userService = UserServiceFactory.getUserService();
+    String redirectUrl = "";
+    String userEmail = "None";
+    int token = 0;
     if (userService.isUserLoggedIn()) {
       // remove existing user with email 
-      String userEmail = userService.getCurrentUser().getEmail();
-      int token = new SecureRandom().nextInt();
+      redirectUrl = userService.createLogoutURL("/");
+      userEmail = userService.getCurrentUser().getEmail();
+      token = new SecureRandom().nextInt();
       Entity userEntity = new Entity("User");
       userEntity.setProperty("email", userEmail);
       userEntity.setProperty("token", token);
       userEntity.setProperty("timestamp",System.currentTimeMillis());
       datastore.put(userEntity);
-      String logoutUrl = userService.createLogoutURL("/");
-      response.sendRedirect("/frontPage.html?email="+userEmail+"&url="+java.net.URLEncoder.encode(logoutUrl,"UTF-8")+"&token="+token);
     } else {
-      String loginUrl = userService.createLoginURL("/");
-      response.sendRedirect("/frontPage.html?email=None"+"&url="+java.net.URLEncoder.encode(loginUrl,"UTF-8")+"&token=0");
+      redirectUrl = userService.createLoginURL("/");
     }
+      response.sendRedirect(String.format("/frontPage.html?email=%s&url=%s&token=%s",userEmail,java.net.URLEncoder.encode(redirectUrl,"UTF-8").toString(),token);
   }
 }

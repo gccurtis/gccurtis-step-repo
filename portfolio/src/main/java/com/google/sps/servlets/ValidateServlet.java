@@ -54,11 +54,10 @@ public class ValidateServlet extends HttpServlet {
 	        new FilterPredicate("email", FilterOperator.EQUAL, email);
     Query query = new Query("User").setFilter(propertyFilter);
     List<Entity> results = datastore.prepare(query).asList(FetchOptions.Builder.withDefaults());
-    for(Entity entity: results) {
-      if ( (token == (long) entity.getProperty("token")) ){
+    for (Entity entity: results) {
+      if ((token == (long) entity.getProperty("token"))){
         response.getWriter().println("1");
-	return;
-	// Perhaps use timestamp for expiration on token
+        return;
       }
     }
     response.getWriter().println("0");

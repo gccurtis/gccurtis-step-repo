@@ -51,7 +51,7 @@ public class CommentCharactersDataServlet extends HttpServlet {
       total += (String) entity.getProperty("message");
     }
     char[] allCharacters = total.toCharArray();
-    Map<Character, Integer> characterFrequencies = new HashMap<Character, Integer>();
+    Map<Character, Integer> characterFrequencies = new HashMap<>();
     for (char trueCharacter: allCharacters){
       char character = Character.toUpperCase(trueCharacter);
       characterFrequencies.put(character, characterFrequencies.getOrDefault(character, 0)+1)

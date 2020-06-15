@@ -23,6 +23,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.Gson;
+import com.google.cloud.translate.Translate;
+import com.google.cloud.translate.TranslateOptions;
+import com.google.cloud.translate.Translation;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -60,8 +63,14 @@ public class CommentServlet extends HttpServlet {
     Query query = new Query("Comment").addSort("timestamp", Query.SortDirection.DESCENDING);
     int limit = Integer.parseInt(request.getParameter("numberOfComments"));
     List<Entity> results = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(limit));
-    for(Entity entity: results) {
+    for (Entity entity: results) {
       String message = (String) entity.getProperty("message");
+      //String originalText = request.getParameter("text");
+      //String languageCode = request.getParameter("languageCode");
+      //Translate translate = TranslateOptions.getDefaultInstance().getService();
+      //Translation translation =
+       // translate.translate(message, Translate.TranslateOption.targetLanguage(request.getParameter("lang")));
+      //String translatedText = translation.getTranslatedText();
       long timestamp = (long) entity.getProperty("timestamp");
       String email = (String) entity.getProperty("email");
       long id = entity.getKey().getId(); 

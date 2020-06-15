@@ -47,19 +47,14 @@ public class CommentCharactersDataServlet extends HttpServlet {
     int limit = Integer.parseInt(request.getParameter("numberOfComments"));
     String total = "";
     List<Entity> results = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(limit));
-    for(Entity entity: results) {
+    for (Entity entity: results) {
       total += (String) entity.getProperty("message");
     }
     char[] allCharacters = total.toCharArray();
     Map<Character, Integer> characterFrequencies = new HashMap<Character, Integer>();
-    for(char trueCharacter: allCharacters){
+    for (char trueCharacter: allCharacters){
       char character = Character.toUpperCase(trueCharacter);
-      if(characterFrequencies.containsKey(character)){
-        characterFrequencies.replace(character, characterFrequencies.get(character)+1);
-      }
-      else{
-        characterFrequencies.put(character, 1);
-      }
+      characterFrequencies.put(character, characterFrequencies.getOrDefault(character, 0)+1)
     }
     String json = gson.toJson(characterFrequencies);
     response.setContentType("application/json;");

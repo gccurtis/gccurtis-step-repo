@@ -48,14 +48,9 @@ public class CommentEmailsDataServlet extends HttpServlet {
     String currentEmail;
     List<Entity> results = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(limit));
     Map<String, Integer> emailFrequencies = new HashMap<String, Integer>();
-    for(Entity entity: results) {
+    for (Entity entity: results) {
       currentEmail = (String) entity.getProperty("email");
-      if(emailFrequencies.containsKey(currentEmail)){
-        emailFrequencies.replace(currentEmail, emailFrequencies.get(currentEmail)+1);
-      }
-      else{
-        emailFrequencies.put(currentEmail, 1);
-      }
+      emailFrequencies.put(currentEmail, emailFrequencies.getOrDefault(currentEmail, 0) + 1);
     }
     String json = gson.toJson(emailFrequencies);
     response.setContentType("application/json;");

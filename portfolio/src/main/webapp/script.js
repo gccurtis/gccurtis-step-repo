@@ -52,7 +52,7 @@ function loadComments(){
   const numberOfComments = document.getElementById("numberOfComments").value;
   const commentSection = document.getElementById('comment-section');
   removeChildren(commentSection);
-  fetch('/comments?numberOfComments='+numberOfComments).then(response => response.json()).then((comments) => {
+  fetch(`/comments?numberOfComments=${numberOfComments}&lang=zh`).then(response => response.json()).then((comments) => {
     for(i=0;i<comments.length;i++){
       const commentContainer = document.createElement("li");
       const commentId = comments[i].id;
@@ -87,21 +87,21 @@ window.onload = (event) => {
 }
 
 function drawChart(commentInfo, numberOfComments){
-  fetch('/comment-'+commentInfo+'-data?numberOfComments='+String(numberOfComments)).then(response => response.json()).then((commentData) => {
+  fetch(`/comment-${commentInfo}-data?numberOfComments=${String(numberOfComments)}`).then(response => response.json()).then((commentData) => {
   trueCommentData = [];
-  for(letter in commentData){
-    if(letter == " "){
-       trueCommentData = trueCommentData.concat([["<SPACE>",commentData[letter]]]);
+  for (letter in commentData){
+    if (letter == " "){
+      trueCommentData = trueCommentData.concat([["<SPACE>",commentData[letter]]]);
     }
-    else{
-       trueCommentData = trueCommentData.concat([[letter,commentData[letter]]]);
+    else {
+      trueCommentData = trueCommentData.concat([[letter,commentData[letter]]]);
     }
   }
   const formattedCommentData = [[commentInfo.toUpperCase(),"Frequency"]].concat(trueCommentData);
   const data = google.visualization.arrayToDataTable(formattedCommentData);
   const chart = new google.visualization.Histogram(document.getElementById('comment-'+commentInfo+'-chart'));
   const options = {
-    title: 'Frequency of '+commentInfo+' in comments',
+    title: `Frequency of ${commentInfo} in comments`,
     legend: { position: 'none' },
   };
   chart.draw(data, options);

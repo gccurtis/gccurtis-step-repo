@@ -55,10 +55,9 @@ public class ValidateServlet extends HttpServlet {
     Query query = new Query("User").setFilter(propertyFilter);
     List<Entity> results = datastore.prepare(query).asList(FetchOptions.Builder.withDefaults());
     for(Entity entity: results) {
-      if ( (token == (long) entity.getProperty("token")) ){
+      if ((token == (long) entity.getProperty("token"))){
         response.getWriter().println("1");
-	return;
-	// Perhaps use timestamp for expiration on token
+        return;
       }
     }
     response.getWriter().println("0");

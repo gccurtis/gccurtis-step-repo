@@ -61,10 +61,10 @@ public class CommentServlet extends HttpServlet {
     int limit = Integer.parseInt(request.getParameter("numberOfComments"));
     List<Entity> results = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(limit));
     for(Entity entity: results) {
-      String message = (String) entity.getProperty("message");
-      long timestamp = (long) entity.getProperty("timestamp");
-      String email = (String) entity.getProperty("email");
       long id = entity.getKey().getId(); 
+      long timestamp = (long) entity.getProperty("timestamp");
+      String message = (String) entity.getProperty("message");
+      String email = (String) entity.getProperty("email");
       comments.add(new Comment(id, email, message, timestamp));
     }
 

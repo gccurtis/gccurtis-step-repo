@@ -44,7 +44,7 @@ function deleteComment(id){
   var oReq = new XMLHttpRequest();
   oReq.open("POST", "/delete-comment");
   oReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-  oReq.send("id=${id}");
+  oReq.send(`id=${id}`);
   loadComments();
 }
 
@@ -52,11 +52,11 @@ function loadComments(){
   const numberOfComments = document.getElementById("numberOfComments").value;
   const commentSection = document.getElementById('comment-section');
   removeChildren(commentSection);
-  fetch('/comments?numberOfComments='+numberOfComments).then(response => response.json()).then((comments) => {
+  fetch(`/comments?numberOfComments=${numberOfComments}`).then(response => response.json()).then((comments) => {
     for(i=0;i<comments.length;i++){
       const commentContainer = document.createElement("li");
       const commentId = comments[i].id;
-      commentContainer.innerText = comments[i].email+" says: "+comments[i].message;
+      commentContainer.innerText = `${comments[i].email} says: ${comments[i].message}`;
       commentContainer.setAttribute("id",comments[i].id);
       commentContainer.setAttribute("onClick","deleteComment(this.id)");
       commentSection.appendChild(commentContainer);
@@ -66,17 +66,14 @@ function loadComments(){
 
 window.onload = (event) => {
   fetch(`validate-email?email=${params.get("?email")}&token=${params.get("token")}`).then(response => response.text()).then((check) =>{
-    console.log(check);
     if(check == 0 || check == "0"){
-      console.log(check);
       const displayComments = document.getElementById("display-comments");
       removeChildren(displayComments);
       const message = document.createElement("a");
       message.setAttribute("href",params.get("url"));
       message.innerText = "Click here to Log in and see/add comments!";
       displayComments.appendChild(message);
-    }
-    else{
+    } else{
       const logoutUrl = document.getElementById("logout-url");
       logoutUrl.setAttribute("href",params.get("url"));
       logoutUrl.innerText = "LOGOUT";

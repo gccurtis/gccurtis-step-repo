@@ -60,7 +60,7 @@ public class CommentServlet extends HttpServlet {
     Query query = new Query("Comment").addSort("timestamp", Query.SortDirection.DESCENDING);
     int limit = Integer.parseInt(request.getParameter("numberOfComments"));
     List<Entity> results = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(limit));
-    for(Entity entity: results) {
+    for (Entity entity: results) {
       long id = entity.getKey().getId(); 
       long timestamp = (long) entity.getProperty("timestamp");
       String message = (String) entity.getProperty("message");

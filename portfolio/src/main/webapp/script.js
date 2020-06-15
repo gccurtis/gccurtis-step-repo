@@ -16,67 +16,68 @@
  * Adds a random greeting to the page.
  */
 
-//Gets url parameters and decodes them
+// Gets url parameters and decodes them
+// Example: If URL is: www.google.com?search=YCombinator&Year=2020, then params is: {search: YCombinator, Year: 2020} 
 const params = new Map(window.location.search.split("&").map(x => x.split("=")).map(y => [y[0],decodeURIComponent(y[1])]));
 
 function addRandomGreeting() {
-  fetch('/data').then(response => response.json()).then((data) => {
-    const greeting = data[Math.floor(Math.random()*data.length)];
-    const greetingContainer = document.getElementById('greeting-container');
-    greetingContainer.innerText = greeting;
-  });
+	fetch('/data').then(response => response.json()).then((data) => {
+		const greeting = data[Math.floor(Math.random()*data.length)];
+		const greetingContainer = document.getElementById('greeting-container');
+		greetingContainer.innerText = greeting;
+	});
 }
 
 function getData(){
-  fetch(`/data2?name=${document.getElementById("text-input").value}`).then(response => response.text()).then((data) => {
-    document.getElementById('data-display').innerText = data;
-  });
+	fetch(`/data2?name=${document.getElementById("text-input").value}`).then(response => response.text()).then((data) => {
+		document.getElementById('data-display').innerText = data;
+	});
 }
 
 function removeChildren(node){
-  const children = node.childNodes;
-  while(node.hasChildNodes()){
-    node.removeChild(children[0]);
-  }
+	const children = node.childNodes;
+	while(node.hasChildNodes()){
+		node.removeChild(children[0]);
+	}
 }
 
 function deleteComment(id){
-  var oReq = new XMLHttpRequest();
-  oReq.open("POST", "/delete-comment");
-  oReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-  oReq.send(`id=${id}`);
-  loadComments();
+	var oReq = new XMLHttpRequest();
+	oReq.open("POST", "/delete-comment");
+	oReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	oReq.send(`id=${id}`);
+	loadComments();
 }
 
 function loadComments(){
-  const numberOfComments = document.getElementById("numberOfComments").value;
-  const commentSection = document.getElementById('comment-section');
-  removeChildren(commentSection);
-  fetch(`/comments?numberOfComments=${numberOfComments}`).then(response => response.json()).then((comments) => {
-    for(i=0;i<comments.length;i++){
-      const commentContainer = document.createElement("li");
-      const commentId = comments[i].id;
-      commentContainer.innerText = `${comments[i].email} says: ${comments[i].message}`;
-      commentContainer.setAttribute("id",comments[i].id);
-      commentContainer.setAttribute("onClick","deleteComment(this.id)");
-      commentSection.appendChild(commentContainer);
-    }
-  })
+	const numberOfComments = document.getElementById("numberOfComments").value;
+	const commentSection = document.getElementById('comment-section');
+	removeChildren(commentSection);
+	fetch(`/comments?numberOfComments=${numberOfComments}`).then(response => response.json()).then((comments) => {
+		for(i=0;i<comments.length;i++){
+			const commentContainer = document.createElement("li");
+			const commentId = comments[i].id;
+			commentContainer.innerText = `${comments[i].email} says: ${comments[i].message}`;
+			commentContainer.setAttribute("id",comments[i].id);
+			commentContainer.setAttribute("onClick","deleteComment(this.id)");
+			commentSection.appendChild(commentContainer);
+		}
+	})
 }
 
 window.onload = (event) => {
-  fetch(`validate-email?email=${params.get("?email")}&token=${params.get("token")}`).then(response => response.text()).then((check) =>{
-    if(check == 0 || check == "0"){
-      const displayComments = document.getElementById("display-comments");
-      removeChildren(displayComments);
-      const message = document.createElement("a");
-      message.setAttribute("href",params.get("url"));
-      message.innerText = "Click here to Log in and see/add comments!";
-      displayComments.appendChild(message);
-    } else{
-      const logoutUrl = document.getElementById("logout-url");
-      logoutUrl.setAttribute("href",params.get("url"));
-      logoutUrl.innerText = "LOGOUT";
-    }
-  })
+	fetch(`validate-email?email=${params.get("?email")}&token=${params.get("token")}`).then(response => response.text()).then((check) =>{
+		if(check == 0 || check == "0"){
+			const displayComments = document.getElementById("display-comments");
+			removeChildren(displayComments);
+			const message = document.createElement("a");
+			message.setAttribute("href",params.get("url"));
+			message.innerText = "Click here to Log in and see/add comments!";
+			displayComments.appendChild(message);
+		} else{
+			const logoutUrl = document.getElementById("logout-url");
+			logoutUrl.setAttribute("href",params.get("url"));
+			logoutUrl.innerText = "LOGOUT";
+		}
+	})
 }

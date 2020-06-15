@@ -54,7 +54,7 @@ public class ValidateServlet extends HttpServlet {
 	        new FilterPredicate("email", FilterOperator.EQUAL, email);
     Query query = new Query("User").setFilter(propertyFilter);
     List<Entity> results = datastore.prepare(query).asList(FetchOptions.Builder.withDefaults());
-    for(Entity entity: results) {
+    for (Entity entity: results) {
       if ((token == (long) entity.getProperty("token"))){
         response.getWriter().println("1");
         return;

@@ -40,21 +40,19 @@ DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
     response.setContentType("text/html");
     UserService userService = UserServiceFactory.getUserService();
-    String redirectUrl = "";
+    int token = 0;
+    String redirectUrl = userService.createLoginURL("/");
     String userEmail = "None";
     int token = 0;
     if (userService.isUserLoggedIn()) {
-      // remove existing user with email 
-      redirectUrl = userService.createLogoutURL("/");
-      userEmail = userService.getCurrentUser().getEmail();
       token = new SecureRandom().nextInt();
+      userEmail = userService.getCurrentUser().getEmail();
+      redirectUrl = userService.createLogoutURL("/");
       Entity userEntity = new Entity("User");
       userEntity.setProperty("email", userEmail);
       userEntity.setProperty("token", token);
       userEntity.setProperty("timestamp",System.currentTimeMillis());
       datastore.put(userEntity);
-    } else {
-      redirectUrl = userService.createLoginURL("/");
     }
       response.sendRedirect(String.format("/frontPage.html?email=%s&url=%s&token=%s",userEmail,java.net.URLEncoder.encode(redirectUrl,"UTF-8").toString(),token);
   }

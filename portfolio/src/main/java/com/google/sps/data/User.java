@@ -14,17 +14,17 @@
 
 package com.google.sps.data;
 
-public final class Comment {
+public final class User {
 
   private final long id;
   private final String email;
-  private final String message;
+  private final int token;
   private final long timestamp;
 
-  public Comment(long id, String email, String message, long timestamp) {
+  public User(long id, String email, int token, long timestamp) {
     this.id = id;
     this.email = email;
-    this.message = message;
+    this.token = token;
     this.timestamp = timestamp;
   }
 }

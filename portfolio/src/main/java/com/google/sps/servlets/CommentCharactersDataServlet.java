@@ -42,7 +42,7 @@ public class CommentCharactersDataServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Gson gson = new Gson();
-    ArrayList<Comment> comments = new ArrayList<Comment>();
+    ArrayList<Comment> comments = new ArrayList<>();
     Query query = new Query("Comment").addSort("timestamp",Query.SortDirection.DESCENDING);
     int limit = Integer.parseInt(request.getParameter("numberOfComments"));
     String total = "";
@@ -54,7 +54,7 @@ public class CommentCharactersDataServlet extends HttpServlet {
     Map<Character, Integer> characterFrequencies = new HashMap<>();
     for (char trueCharacter: allCharacters){
       char character = Character.toUpperCase(trueCharacter);
-      characterFrequencies.put(character, characterFrequencies.getOrDefault(character, 0)+1)
+      characterFrequencies.put(character, characterFrequencies.getOrDefault(character, 0) + 1);
     }
     String json = gson.toJson(characterFrequencies);
     response.setContentType("application/json;");

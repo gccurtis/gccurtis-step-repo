@@ -64,12 +64,6 @@ public class CommentServlet extends HttpServlet {
     int limit = Integer.parseInt(request.getParameter("numberOfComments"));
     List<Entity> results = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(limit));
     for (Entity entity: results) {
-      //String originalText = request.getParameter("text");
-      //String languageCode = request.getParameter("languageCode");
-      //Translate translate = TranslateOptions.getDefaultInstance().getService();
-      //Translation translation =
-       // translate.translate(message, Translate.TranslateOption.targetLanguage(request.getParameter("lang")));
-      //String translatedText = translation.getTranslatedText();
       long id = entity.getKey().getId(); 
       long timestamp = (long) entity.getProperty("timestamp");
       String message = (String) entity.getProperty("message");

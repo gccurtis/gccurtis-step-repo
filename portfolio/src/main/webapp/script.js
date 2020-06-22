@@ -17,7 +17,13 @@
  */
 
 // Gets url parameters and decodes them
-// Example: If URL is: www.google.com?search=YCombinator&Year=2020, then params is: {search: YCombinator, Year: 2020} 
+/* Example: If URL is: www.google.com?search=YCombinator&Year=2020
+ * 1. First it will get the parameters: "search=YCombinator&Year=2020"
+ * 2. Then it will split by '&': ["search=YCombinator", "Year=2020"]
+ * 3. Next it will use the map method to split each string by '=': [["search", "Ycombinator"],["Year","2020"]]
+ * 4. Then it will decode the strings from urlsafe, in the example given the everything was already urlsafe
+ * 5. Finally it will construct a map from the list of lists: {"search": "YCombinator", "Year": "2020"}
+ */
 const params = new Map(window.location.search.split("&").map(x => x.split("=")).map(y => [y[0],decodeURIComponent(y[1])]));
 
 function addRandomGreeting() {
@@ -50,25 +56,25 @@ function deleteComment(id){
 }
 
 function loadComments(){
-  const numberOfComments = document.getElementById("numberOfComments").value;
-  const commentSection = document.getElementById('comment-section');
-  removeChildren(commentSection);
-  fetch(`/comments?numberOfComments=${numberOfComments}&lang=zh`).then(response => response.json()).then((comments) => {
-    for (i=0;i<comments.length;i++){
-      const commentContainer = document.createElement("li");
-      const commentId = comments[i].id;
-      commentContainer.innerText = comments[i].email+" says: "+comments[i].message;
-      commentContainer.setAttribute("id",comments[i].id);
-      commentContainer.setAttribute("onClick","deleteComment(this.id)");
-      commentSection.appendChild(commentContainer);
-    }
-  drawChart("characters",numberOfComments);
-  drawChart("emails",numberOfComments);
-  })
+	const numberOfComments = document.getElementById("numberOfComments").value;
+	const commentSection = document.getElementById('comment-section');
+	removeChildren(commentSection);
+	fetch(`/comments?numberOfComments=${numberOfComments}`).then(response => response.json()).then((comments) => {
+		for (comment in comments){
+			const commentContainer = document.createElement("li");
+			const commentId = comment.id;
+			commentContainer.innerText = `${comment.email} says: ${comment.message}`;
+			commentContainer.setAttribute("id",comment.id);
+			commentContainer.setAttribute("onClick","deleteComment(this.id)");
+			commentSection.appendChild(commentContainer);
+		}
+	})
 }
 
 window.onload = (event) => {
-	fetch(`validate-email?email=${params.get("?email")}&token=${params.get("token")}`).then(response => response.text()).then((check) =>{
+	fetch(`validate-email?email=${params.get("?email")}&token=${params.get("token")}`).then((response) => {
+		response.text();
+	}).then((check) =>{
 		if (check == 0 || check == "0"){
 			const displayComments = document.getElementById("display-comments");
 			removeChildren(displayComments);
@@ -76,7 +82,7 @@ window.onload = (event) => {
 			message.setAttribute("href",params.get("url"));
 			message.innerText = "Click here to Log in and see/add comments!";
 			displayComments.appendChild(message);
-		} else{
+		} else {
 			const logoutUrl = document.getElementById("logout-url");
 			logoutUrl.setAttribute("href",params.get("url"));
 			logoutUrl.innerText = "LOGOUT";

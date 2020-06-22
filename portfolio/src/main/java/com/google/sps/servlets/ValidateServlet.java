@@ -47,9 +47,9 @@ public class ValidateServlet extends HttpServlet {
       response.getWriter().println("0");
       return;
     }
-    int token = Integer.parseInt(request.getParameter("token"));
     String email = request.getParameter("email");
     int entityToken;
+    int token = Integer.parseInt(request.getParameter("token"));
     Filter propertyFilter =
 	        new FilterPredicate("email", FilterOperator.EQUAL, email);
     Query query = new Query("User").setFilter(propertyFilter);

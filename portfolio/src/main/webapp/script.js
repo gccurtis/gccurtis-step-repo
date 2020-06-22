@@ -17,7 +17,13 @@
  */
 
 // Gets url parameters and decodes them
-// Example: If URL is: www.google.com?search=YCombinator&Year=2020, then params is: {search: YCombinator, Year: 2020} 
+/* Example: If URL is: www.google.com?search=YCombinator&Year=2020
+ * 1. First it will get the parameters: "search=YCombinator&Year=2020"
+ * 2. Then it will split by '&': ["search=YCombinator", "Year=2020"]
+ * 3. Next it will use the map method to split each string by '=': [["search", "Ycombinator"],["Year","2020"]]
+ * 4. Then it will decode the strings from urlsafe, in the example given the everything was already urlsafe
+ * 5. Finally it will construct a map from the list of lists: {"search": "YCombinator", "Year": "2020"}
+ */
 const params = new Map(window.location.search.split("&").map(x => x.split("=")).map(y => [y[0],decodeURIComponent(y[1])]));
 
 function addRandomGreeting() {
@@ -68,7 +74,9 @@ function loadComments(){
 }
 
 window.onload = (event) => {
-	fetch(`validate-email?email=${params.get("?email")}&token=${params.get("token")}`).then(response => response.text()).then((check) =>{
+	fetch(`validate-email?email=${params.get("?email")}&token=${params.get("token")}`).then((response) => {
+		response.text();
+	}).then((check) =>{
 		if (check == 0 || check == "0"){
 			const displayComments = document.getElementById("display-comments");
 			removeChildren(displayComments);
@@ -76,7 +84,7 @@ window.onload = (event) => {
 			message.setAttribute("href",params.get("url"));
 			message.innerText = "Click here to Log in and see/add comments!";
 			displayComments.appendChild(message);
-		} else{
+		} else {
 			const logoutUrl = document.getElementById("logout-url");
 			logoutUrl.setAttribute("href",params.get("url"));
 			logoutUrl.innerText = "LOGOUT";

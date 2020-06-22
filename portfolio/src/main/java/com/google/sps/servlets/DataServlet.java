@@ -29,9 +29,9 @@ public class DataServlet extends HttpServlet {
   
   @Override
   public void init(){
-    msgs.add("A");
-    msgs.add("B");
-    msgs.add("C");
+    msgs.add("Ma Long");
+    msgs.add("Xu Xin");
+    msgs.add("Zhang Jike");
   }
 
 

@@ -89,3 +89,28 @@ window.onload = (event) => {
 		}
 	})
 }
+
+function drawChart(commentInfo, numberOfComments){
+  fetch(`/comment-${commentInfo}-data?numberOfComments=${String(numberOfComments)}`).then(response => response.json()).then((commentData) => {
+  trueCommentData = [];
+  for (letter in commentData){
+    if (letter == " "){
+      trueCommentData = trueCommentData.concat([["<SPACE>",commentData[letter]]]);
+    }
+    else {
+      trueCommentData = trueCommentData.concat([[letter,commentData[letter]]]);
+    }
+  }
+  const formattedCommentData = [[commentInfo.toUpperCase(),"Frequency"]].concat(trueCommentData);
+  const data = google.visualization.arrayToDataTable(formattedCommentData);
+  const chart = new google.visualization.Histogram(document.getElementById('comment-'+commentInfo+'-chart'));
+  const options = {
+    title: `Frequency of ${commentInfo} in comments`,
+    legend: { position: 'none' },
+  };
+  chart.draw(data, options);
+  })
+}
+
+google.charts.load('current', {packages: ['corechart']});
+//google.charts.setOnLoadCallback((() => drawChart(10)));

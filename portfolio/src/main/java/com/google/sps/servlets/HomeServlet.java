@@ -38,11 +38,10 @@ DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
-    response.setContentType("text/html");
     UserService userService = UserServiceFactory.getUserService();
-    int token = 0;
     String redirectUrl = userService.createLoginURL("/");
     String userEmail = "None";
+    String redirectUrl = userService.createLogintURL("/");
     int token = 0;
     if (userService.isUserLoggedIn()) {
       token = new SecureRandom().nextInt();
@@ -54,6 +53,7 @@ DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       userEntity.setProperty("timestamp",System.currentTimeMillis());
       datastore.put(userEntity);
     }
-      response.sendRedirect(String.format("/frontPage.html?email=%s&url=%s&token=%s",userEmail,java.net.URLEncoder.encode(redirectUrl,"UTF-8").toString(),token);
+    response.setContentType("text/html");
+    response.sendRedirect(String.format("/frontPage.html?email=%&url=%s&token=%s",userEmail,java.net.URLEncoder.encode(redirectUrl,"UTF-8"),token);
   }
 }

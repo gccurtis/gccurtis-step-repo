@@ -42,7 +42,7 @@ public class CommentCharactersDataServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Gson gson = new Gson();
-    ArrayList<Comment> comments = new ArrayList<Comment>();
+    ArrayList<Comment> comments = new ArrayList<>();
     Query query = new Query("Comment").addSort("timestamp",Query.SortDirection.DESCENDING);
     int limit = Integer.parseInt(request.getParameter("numberOfComments"));
     String total = "";

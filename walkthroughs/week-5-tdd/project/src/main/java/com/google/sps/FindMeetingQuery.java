@@ -24,16 +24,42 @@ public final class FindMeetingQuery {
 
 	public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
 		List<TimeRange> times = new ArrayList<>();
-		times.add(TimeRange.fromStartEnd(TimeRange.START_OF_DAY,TimeRange.END_OF_DAY);
-		if(request.getAttendees().size() == 0){
+		times.add(TimeRange.WHOLE_DAY);
+		List<TimeRange> newtimes = new ArrayList<>();
+		if (request.getAttendees().size() == 0){
 			return Arrays.asList(TimeRange.WHOLE_DAY);
 		}
-		if(request.getDuration() > TimeRange.WHOLE_DAY.duration()){
+		if (request.getDuration() > TimeRange.WHOLE_DAY.duration()){
 			return Arrays.asList();
 		}
-		for(Event e: events){
-			if(e.when().start() > )
+		for (Event e: events){
+			if(request.getAttendees().containsAll(e.getAttendees())){
+				TimeRange etime = e.getWhen();
+				for (TimeRange time: times){
+					if (time.contains(etime)){
+						newtimes.add(TimeRange.fromStartEnd(time.start(),etime.start(),false));
+						newtimes.add(TimeRange.fromStartEnd(etime.end(),time.end(),false));
+					}
+					else if (time.contains(etime.start())){
+						newtimes.add(TimeRange.fromStartEnd(time.start(),etime.start(),false));
+					}
+					else if (time.contains(etime.end())){
+						newtimes.add(TimeRange.fromStartEnd(etime.end(),time.end(),false));
+					}
+					else{
+						newtimes.add(time);
+					}
+				}
+				times = new ArrayList<>();
+				for(TimeRange newtime: newtimes){
+					if(!(newtime.start() == newtime.end()) && !(newtime.duration() < request.getDuration())){
+						times.add(newtime);
+					}
+				}
+				newtimes = new ArrayList<>();
+			}
+
 		}
-		return Arrays.asList(TimeRange.); 
-  }
+		return times; 
+	}
 }

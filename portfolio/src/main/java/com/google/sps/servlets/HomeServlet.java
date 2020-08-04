@@ -54,6 +54,6 @@ DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       datastore.put(userEntity);
     }
     response.setContentType("text/html");
-    response.sendRedirect(String.format("/frontPage.html?email=%&url=%s&token=%s",userEmail,java.net.URLEncoder.encode(redirectUrl,"UTF-8"),token);
+    response.sendRedirect(String.format("/frontPage.html?email=%&url=%s&token=%s",userEmail,java.net.URLEncoder.encode(redirectUrl,"UTF-8"),token));
   }
 }

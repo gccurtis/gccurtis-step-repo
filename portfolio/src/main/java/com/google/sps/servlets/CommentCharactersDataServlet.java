@@ -54,7 +54,7 @@ public class CommentCharactersDataServlet extends HttpServlet {
     Map<Character, Integer> characterFrequencies = new HashMap<>();
     for (char trueCharacter: allCharacters){
       char character = Character.toUpperCase(trueCharacter);
-      characterFrequencies.put(character, characterFrequencies.getOrDefault(character, 0)+1)
+      characterFrequencies.put(character, characterFrequencies.getOrDefault(character, 0)+1);
     }
     String json = gson.toJson(characterFrequencies);
     response.setContentType("application/json;");
